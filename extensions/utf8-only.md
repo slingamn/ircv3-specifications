@@ -14,7 +14,7 @@ copyrights:
 ---
 
 ## Introduction
-IRC predates the Unicode standard. Consequently, although UTF-8 has been widely adopted on IRC, clients cannot assume that all IRC data is UTF-8. This specification defines way for servers to advertise that they only allow UTF-8 on their network, letting clients change their processing of outgoing and incoming messages accordingly.
+IRC predates the Unicode standard. Consequently, although UTF-8 has been widely adopted on IRC, clients cannot assume that all IRC data is UTF-8. This specification defines a way for servers to advertise that they only allow UTF-8 on their network, letting clients change their processing of outgoing and incoming messages accordingly.
 
 ## The `UTF8ONLY` ISUPPORT token
 This specification introduces a new token `UTF8ONLY` that servers can include in their [ISUPPORT](https://modern.ircdocs.horse/#feature-advertisement) (`005`) output. Servers publishing this token MUST NOT relay content (such as `PRIVMSG` or `NOTICE` message data, channel topics, or realnames) containing non-UTF-8 data to clients. Clients implementing this specification MUST NOT send non-UTF-8 data to the server once they have seen this token. Server handling of such messages is implementation-defined, and MAY involve sending the `FAIL` code described below.
