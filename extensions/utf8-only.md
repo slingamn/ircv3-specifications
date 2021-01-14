@@ -1,5 +1,5 @@
 ---
-title: oragono.io/utf8-only capability
+title: utf8-only capability
 layout: spec
 meta-description: A capability that indicates only UTF-8 traffic is allowed.
 copyrights:
@@ -7,20 +7,23 @@ copyrights:
     name: "Daniel Oaks"
     period: "2021"
     email: "daniel@danieloaks.net"
+  -
+    name: "Shivaram Lingamneni"
+    period: "2021"
+    email: "slingamn@cs.stanford.edu"
 ---
-## Notes for implementing work-in-progress version
-This is a work-in-progress specification.
 
-Software implementing this work-in-progress specification MUST NOT use the unprefixed `utf8-only` capability name. Instead, implementations MUST use the `oragono.io/utf8-only` capability name to be interoperable with other software implementing a compatible work-in-progress version.
+## Notes for implementing work-in-progress version
+This is a work-in-progress specification. Software implementing this work-in-progress specification MUST NOT use the unprefixed `utf8-only` capability name. Instead, implementations MUST use the `draft/utf8-only` capability name to be interoperable with other software implementing a compatible work-in-progress version.
 
 
 ## Introduction
-IRC encodings have been an issue for a very long time. Some servers decide to disallow all encodings other than UTF-8 to prevent interoperability issues between clients. This specification defines an informational cap and a `FAIL` code to assist clients while connected to servers that do this.
+IRC predates the Unicode standard. Consequently, although UTF-8 has been widely adopted as the character encoding for IRC, servers and clients cannot in general assume that IRC data is UTF-8. This specification defines an informational capability that makes this assumption possible.
 
-## The `oragono.io/utf8-only` capability
-This capability indicates that the server only supports UTF-8 messages. This means that any messages sent to the client from the server (and from any other clients) will be UTF-8. Servers that receive non-UTF-8 traffic from clients may handle it in an implementation-defined way, but MUST NOT send messages containing non-UTF-8 data to any other clients on the network.
+## The `draft/utf8-only` capability
+`draft/utf8-only` is an informational capability indicating that the server only supports UTF-8 messages. Servers advertising this capability MUST NOT relay content (such as `PRIVMSG` or `NOTICE` message data, channel topics, or realnames) containing non-UTF-8 data to clients. Clients implementing this specification MUST NOT send non-UTF8 data to the server once they have received this capability. Server handling of such messages is implementation-defined, but MAY involve sending the `FAIL` code described below.
 
-If a client receives this informational cap, they MUST silently set their outgoing encoding to UTF-8 without any user intervention. This allows misconfigured clients to transparently work on networks that only allow UTF-8 traffic.
+If a client implementing this specification receives this capability, they MUST set their outgoing encoding to UTF-8 without requiring any user intervention. This allows misconfigured clients to work transparently on networks that only allow UTF-8 traffic.
 
 ## The `INVALID_UTF8` `FAIL` code
 This is a code that can be used with the `FAIL` command, as defined by the [standard replies](https://ircv3.net/specs/extensions/standard-replies) specification. This code indicates to the client that their message was dropped or modified because it contained non-UTF-8 bytes.
