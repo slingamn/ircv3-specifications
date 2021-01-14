@@ -18,12 +18,12 @@ This is a work-in-progress specification. Software implementing this work-in-pro
 
 
 ## Introduction
-IRC predates the Unicode standard. Consequently, although UTF-8 has been widely adopted as the character encoding for IRC, servers and clients cannot in general assume that IRC data is UTF-8. This specification defines an informational capability that makes this assumption possible.
+IRC predates the Unicode standard. Consequently, although UTF-8 has been widely adopted on IRC, clients cannot assume that all IRC data is UTF-8. This specification defines an informational capability for servers that only allow UTF-8 on their network, letting clients change their encoding to suit.
 
 ## The `draft/utf8-only` capability
-`draft/utf8-only` is an informational capability indicating that the server only supports UTF-8 messages. Servers advertising this capability MUST NOT relay content (such as `PRIVMSG` or `NOTICE` message data, channel topics, or realnames) containing non-UTF-8 data to clients. Clients implementing this specification MUST NOT send non-UTF8 data to the server once they have received this capability. Server handling of such messages is implementation-defined, but MAY involve sending the `FAIL` code described below.
+`draft/utf8-only` is an informational capability indicating that the server only supports UTF-8 messages. Servers advertising this capability MUST NOT relay content (such as `PRIVMSG` or `NOTICE` message data, channel topics, or realnames) containing non-UTF-8 data to clients. Clients implementing this specification MUST NOT send non-UTF-8 data to the server once they have seen this capability. Server handling of such messages is implementation-defined, and MAY involve sending the `FAIL` code described below.
 
-If a client implementing this specification receives this capability, they MUST set their outgoing encoding to UTF-8 without requiring any user intervention. This allows misconfigured clients to work transparently on networks that only allow UTF-8 traffic.
+If a client implementing this specification sees this capability, they MUST set their outgoing encoding to UTF-8 without requiring any user intervention. This allows clients to work transparently on networks that only allow UTF-8 traffic.
 
 ## The `INVALID_UTF8` `FAIL` code
 This is a code that can be used with the `FAIL` command, as defined by the [standard replies](https://ircv3.net/specs/extensions/standard-replies) specification. This code indicates to the client that their message was dropped or modified because it contained non-UTF-8 bytes.
