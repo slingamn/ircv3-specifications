@@ -107,11 +107,11 @@ If the server receives a syntactically invalid `CHATHISTORY` command, e.g., an u
     FAIL CHATHISTORY INVALID_PARAMS the_given_command :Too many parameters
     FAIL CHATHISTORY INVALID_PARAMS the_given_command the_given_timestamp :Invalid timestamp
 
-If the target does not exist or the client does not have permissions to query it, the `INVALID_TARGET` error code SHOULD be returned.
+If the target does not exist or the client does not have permissions to query it, the `INVALID_TARGET` error code SHOULD be returned:
 
     FAIL CHATHISTORY INVALID_TARGET the_given_command the_given_target :Messages could not be retrieved
 
-If no message history can be returned due to an error, the `MESSAGE_ERROR` error code SHOULD be returned.
+If no message history can be returned due to an error, the `MESSAGE_ERROR` error code SHOULD be returned:
 
     FAIL CHATHISTORY MESSAGE_ERROR the_given_command the_given_target [extra_context] :Messages could not be retrieved
 
