@@ -24,7 +24,11 @@ Such implementations may wish to update publicly visible state depending on the 
 ## Implementation
 This specification introduces a new informational capability, `draft/pre-away`. Clients MAY request this capability; servers implementing this specification MUST acknowledge it if it is requested.
 
-Servers implementing this specification MUST accept the `AWAY` command before connection registration has completed, whether or not the `draft/pre-away` capability has been negotiated. The `AWAY` command has its normal semantics in this context, except servers SHOULD treat `AWAY *` (i.e. an `AWAY` message consisting of the single character `*`) as indicating that the user is not present for an unspecified reason.
+Servers implementing this specification MUST accept the `AWAY` command before connection registration has completed, whether or not the `draft/pre-away` capability has been negotiated. The `AWAY` command has its normal semantics in this context, except servers SHOULD treat the form:
+
+    AWAY *
+
+i.e. an `AWAY` message consisting of the single character `*`, as indicating that the user is not present for an unspecified reason.
 
 In its conventional form:
 
@@ -32,7 +36,9 @@ In its conventional form:
 
 the `AWAY` command MAY be used pre-registration to set a human-readable away message associated with the connection as usual. Similarly, `AWAY` with no parameters, which normally indicates that the user is present, has no effect.
 
-Clients receiving `*` as the AWAY message (for example, in `301 RPL_AWAY` or [away-notify][away-notify]) SHOULD treat it as indicating that the user is not present for an unspecified reason. Servers MAY substitute a human-readable message for the `*` if it would otherwise be relayed as an away message.
+If the client's nickname was not already present on the server, then `AWAY` pre-registration sets the away message but does not inhibit reporting of the change in nickname status, e.g. via [monitor][monitor].
+
+Clients receiving `*` as an away message (for example, in `301 RPL_AWAY` or [away-notify][away-notify]) SHOULD treat it as indicating that the user is not present for an unspecified reason. Servers MAY substitute a human-readable message for the `*` if it would otherwise be relayed as an away message.
 
 ## Implementation considerations
 This section is non-normative.
