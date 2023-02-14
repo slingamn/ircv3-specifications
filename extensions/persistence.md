@@ -73,9 +73,9 @@ where `<client-setting>` takes one of the three values specified above; the serv
 
 #### Errors and Warnings
 
-Servers SHOULD NOT allow unauthenticated clients to become persistent, since there is currently no way for the client to reconnect in that case. Unauthenticated clients attempting to issue `GET` or `SET` SHOULD receive:
+Servers MUST NOT allow clients to become persistent unless there is some mechanism by which the client can reconnect to their persistent identity, e.g. via SASL or a session token mechanism. Clients attempting to issue `GET` or `SET` without an appropriate mechanism enabled SHOULD receive:
 
-    FAIL PERSISTENCE ACCOUNT_REQUIRED :An account is required
+    FAIL PERSISTENCE CREDENTIALS_REQUIRED :Persistence is unavailable due to lack of credentials
 
 On invalid parameters, the server MUST return:
 
@@ -139,6 +139,8 @@ A client negotiates the `draft/persistence` capability and sees that persistence
 ## Implementation Considerations
 
 Clients observing that their connection is persistent SHOULD NOT attempt to automatically rejoin channels; rather, they should wait for the server to send JOIN lines for channels that the persistent presence is already a member of. This prevents such clients from rejoining channels that were PART'ed by a different client associated with the same presence.
+
+The mechanism by which clients authenticate to their persistent identity during reconnection is unspecified. However, if the client is authenticated via SASL and has not enabled any other capabilities that specify a mechanism for reattaching to an identity, both client and server SHOULD assume that the client will reattach by authenticating with SASL and providing the appropriate credentials.
 
 ## Recommendations
 
